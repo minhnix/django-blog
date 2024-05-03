@@ -1,10 +1,10 @@
 from django.db import models
+from martor.models import MartorField
 
 # Create your models here.
 
 class Tag(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    # posts = models.ManyToManyField("Post", related_name="tags")
+    name = models.CharField(max_length=100, unique=True, db_index=True)
     def __str__(self):
         return self.name
 
@@ -12,6 +12,7 @@ class Tag(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
+    description = MartorField(null=True, blank=True)
     url = models.CharField(max_length=255, unique=True)
     created_on = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
