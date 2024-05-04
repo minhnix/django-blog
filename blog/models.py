@@ -14,10 +14,12 @@ class Post(models.Model):
     content = models.TextField()
     description = MartorField(null=True, blank=True)
     url = models.CharField(max_length=255, unique=True)
+    thumbnail = models.ImageField(upload_to="thumbnail/", null=True)
     created_on = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     tags = models.ManyToManyField("Tag", related_name="posts")
     author = models.ForeignKey("User", on_delete=models.CASCADE)
+    published = models.BooleanField(default=False)
     def __str__(self):
         return self.title
     
