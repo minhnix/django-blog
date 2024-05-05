@@ -2,3 +2,4 @@ django
 numpy
 mysqlclient
 martor
+Pillow

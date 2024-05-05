@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-qpjw43mgy1&kt+s+avl2l$6%kp-j#bri(zzw23)r89m3efp13h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1"]
 
 
 # Application definition
@@ -134,7 +134,7 @@ STATIC_URL = 'static/'
 # STATICFILES_DIRS = [
 #     BASE_DIR / 'blog/static',  # Specify the directory containing your static files
 # ]
-STATIC_ROOT = BASE_DIR / 'static' 
+# STATIC_ROOT = BASE_DIR / 'static' 
 
 # MARKDOWN SETTINGS
 
@@ -165,7 +165,7 @@ MARTOR_TOOLBAR_BUTTONS = [
 MARTOR_ENABLE_LABEL = False
 
 # Disable admin style when using custom admin interface e.g django-grappelli (default is True)
-MARTOR_ENABLE_ADMIN_CSS = False
+MARTOR_ENABLE_ADMIN_CSS = True
 
 # Imgur API Keys
 MARTOR_IMGUR_CLIENT_ID = 'ef92ac22207c5f1'
