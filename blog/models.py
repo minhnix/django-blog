@@ -11,7 +11,6 @@ class Tag(models.Model):
 
 class Post(models.Model):
     title = models.CharField(max_length=255)
-    content = models.TextField()
     description = MartorField(null=True, blank=True)
     url = models.CharField(max_length=255, unique=True)
     thumbnail = models.ImageField(upload_to="thumbnail/", null=True)
