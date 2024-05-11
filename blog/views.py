@@ -9,7 +9,7 @@ def index(request):
 	return render(request, 'index.html')
 
 def tag_index(request):
-	tags = Tag.objects.raw('''Select t.id, name, count(name) as count 
+	tags = Tag.objects.raw('''Select t.id, name, count(name) as count
 						from blog_tag t left join blog_post_tags pt 
 						on t.id = pt.tag_id group by t.id, name''')
 	print(tags)
@@ -26,6 +26,8 @@ def tag_detail(request, tag_name):
             'title': post.title,
 			'created_on': post.created_on,
 			'author': post.author.username,
+            'thumbnail': post.thumbnail.url if post.thumbnail else '',
+            
         }
 		posts_data.append(post_info)
 
