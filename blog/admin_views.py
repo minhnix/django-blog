@@ -28,6 +28,11 @@ def create_post(request):
             post.author = User.objects.get(id=1)
             post.url = post.title.replace(" ", "-").lower() + "-" + randomID()
             post.save()
+            tag_names = form.cleaned_data['tag_names'].split(',')  # Tách các tag thành danh sách
+            for tag_name in tag_names:
+                tag, created = Tag.objects.get_or_create(name=tag_name.strip().upper())
+                post.tags.add(tag)
+
             messages.success(request, "%s successfully saved." % post.title)
             return redirect("/dashboard/posts")
     else:
@@ -37,18 +42,21 @@ def create_post(request):
 
 def update_post(request, post_id):
     post = Post.objects.get(id=post_id)
-    form = PostForm(initial={"title": post.title, "description": post.description, "thumbnail": post.thumbnail, "id": post.id})
+    form = PostForm(initial={"title": post.title, "description": post.description, "thumbnail": post.thumbnail, "id": post.id, "tag_names": ", ".join([tag.name for tag in post.tags.all()])})
     thumbnail = post.thumbnail.url
     if request.method == "POST":
                     form = PostForm(request.POST, request.FILES, instance=post)
-            # if form.is_valid():  
-                    form.save() 
-                    model = form.instance
-                    messages.success(request, "Post with id %s successfully updated." % model.id)
+                    post = form.save(commit=False) 
+                    tag_names = form.cleaned_data['tag_names'].split(',')
+                    post.tags.clear()
+                    for tag_name in tag_names:
+                        tag, created = Tag.objects.get_or_create(name=tag_name.strip().upper())
+                        post.tags.add(tag)
+
+                    post.save()
+                    messages.success(request, "Post with id %s successfully updated." % post.id)
                     return redirect('/dashboard/posts')  
-            # else:
-                    # messages.error(request, "Something error", extra_tags="danger")
-                    # return redirect("/dashboard/tags")
+    
     return render(request, "admin/post/form.html", {"form": form, "thumbnail": thumbnail})
 
 
@@ -80,9 +88,9 @@ def tag_index(request):
 def create_tag(request):
     if request.method == "POST":
             form = TagForm(request.POST)
-            print(form)
             if form.is_valid():
                     tag = form.save(commit=False)
+                    tag.name = tag.name.upper()
                     tag.save()
                     messages.success(request, "%s successfully saved." % tag.name)
             else:

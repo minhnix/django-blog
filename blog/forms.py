@@ -11,9 +11,22 @@ class SimpleForm(forms.Form):
 
 
 class PostForm(forms.ModelForm):
+    tag_names = forms.CharField(max_length=1000, required=False, help_text="Enter tags separated by commas")
+
     class Meta:
         model = Post
-        fields = ['title', 'description', 'thumbnail', 'id']
+        fields = ['title', 'description', 'thumbnail']  # Loại bỏ trường 'id'
+
+    # def save(self, commit=True):
+    #     post = super().save(commit=False)
+    #     tag_names = self.cleaned_data.get('tag_names')
+    #     if tag_names:
+    #         tag_names = [tag.strip() for tag in tag_names.split(',')]
+    #         post.save()
+    #         post.tags.add(*tag_names)
+    #     else:
+    #         post.save()
+    #     return post
 
 class TagForm(forms.ModelForm):
     class Meta:
