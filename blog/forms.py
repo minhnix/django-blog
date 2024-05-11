@@ -1,4 +1,4 @@
-from .models import Post
+from .models import Post, Tag
 from django import forms
 
 from martor.fields import MartorFormField
@@ -13,4 +13,9 @@ class SimpleForm(forms.Form):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
+        fields = ['title', 'description', 'thumbnail', 'id']
+
+class TagForm(forms.ModelForm):
+    class Meta:
+        model = Tag
         fields = "__all__"

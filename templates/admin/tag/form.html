@@ -1,0 +1,21 @@
+{% extends "admin/layout/base.html" %} {% load static %} 
+{% block css %}
+{% endblock %} 
+
+{% block content %}
+<form class="form" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="tag_name">Tag Name:</label>
+        {{ form.name }}
+    </div>
+    <div class="form-group mt-2">
+        <button class="btn btn-success">
+            <i class="save icon"></i> Save Tag
+        </button>
+    </div>
+</form>
+{% endblock %} 
+
+{% block js %}
+{% endblock %}
