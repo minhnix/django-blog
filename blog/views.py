@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Tag, Post
+from .models import Tag, Post, User
 from .forms import PostForm, SimpleForm
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -37,8 +37,28 @@ def tag_detail(request, tag_name):
     
 	return render(request, 'tag_detail.html', {'data': data})
 
+def post_detail(request, post_id):
+    # Retrieve the post object or return a 404 error if not found
+    post = get_object_or_404(Post, id=post_id)
+    author = get_object_or_404(User, id=post.author_id)
+    # Prepare the data to pass to the template
+    # data = {
+    #     'post_id': post.id,
+    #     'title': post.title,
+    #     'content': post.content,
+    #     'created_on': post.created_on,
+    #     'description': post.description,
+    #     'author': post.author.username,
+    # }
+    context = {"post": post,
+               "author": author}
+    
+    theme = getattr(settings, "MARTOR_THEME", "bootstrap")
+    return render(request, "%s/post_detail.html" % theme, context)
+    # Render the template with the post data
+
 def create_post(request):
-	return render(request, 'form.html')
+	return render(request, '../templates/boostrap/form.html')
 
 def home_redirect_view(request):
     return redirect("simple_form")
