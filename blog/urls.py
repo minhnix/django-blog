@@ -4,8 +4,8 @@ from . import admin_views
 urlpatterns = [
     path('', views.index, name='index'),
     path('tags/', views.tag_index, name='tag_index'),
+    path('posts/', views.tag_index, name='posts'),
     path('tags/<str:tag_name>/', views.tag_detail, name='tag_detail'),
-    # path('admin/', views.admin, name='admin'),
     path('dashboard/', admin_views.index, name='dashboard'),
     path('dashboard/posts/', admin_views.post_index, name='admin_post'),
     path('dashboard/posts/create/', admin_views.create_post, name='admin_post_create'),
@@ -21,5 +21,4 @@ urlpatterns = [
     path("post-form/", views.post_form_view, name="post_form"),
     path("post/<int:post_id>", views.post_detail, name="post"),
     path("test-markdownify/", views.test_markdownify, name="test_markdownify"),
-    # path("home/", views.home_view, name="home"),
 ]

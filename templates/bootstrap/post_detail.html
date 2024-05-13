@@ -1,11 +1,9 @@
-{% extends "bootstrap/base.html" %} 
-{% load static %} 
-{% load martortags %}
-{%block title %}
-Test Markdonify :: {{ block.super }}
-{% endblock %} 
-
-{% block css%}
+{% extends "bootstrap/base.html" %} {% load static %} {% load martortags %}
+{%block title %} Blog post {% endblock %} {% block css%}
+<link
+  href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+  rel="stylesheet"
+/>
 <link
   href="{% static 'plugins/css/ace.min.css' %}"
   type="text/css"
@@ -18,13 +16,33 @@ Test Markdonify :: {{ block.super }}
   media="all"
   rel="stylesheet"
 />
-{% endblock %} 
+<link
+  href="{% static 'plugins/css/bootstrap.min.css' %}"
+  type="text/css"
+  media="all"
+  rel="stylesheet"
+/>
+<link
+  href="{% static 'main.css' %}"
+  type="text/css"
+  media="all"
+  rel="stylesheet"
+/>
 
-{% block content %}
+{% endblock %} {% block content %}
 <div class="martor-content">
-  <h1>Title: {{ post.title }}</h1>
-  <p><b>Description:</b></p>
-  <h3>Author: {{ author.username }} <h5> {{post.created_on}}</h5> </h3>
+  <h1 class="truncate text-6xl">
+    <span class="truncate text-black font-bold text-6xl">
+      Title: {{ post.title }}
+    </span>
+  </h1>
+  {% comment %}
+  <p><b class="text-black">Description:</b></p>
+  {% endcomment %}
+  <h3 class="text-blue-900">
+    Author: {{ author.username }}
+    <h5 class="text-black">{{post.created_on}}</h5>
+  </h3>
   <hr />
   <div class="martor-preview">{{ post.description|safe_markdown }}</div>
 </div>

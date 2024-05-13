@@ -18,6 +18,7 @@ def tag_index(request):
 def tag_detail(request, tag_name):
 	tag = Tag.objects.get(name=tag_name)
 	posts_with_tag = tag.posts.all()
+
 	# posts_with_tag = Post.objects.select_related('tags').filter(tags__id=tag.id)
 	posts_data = []
 	for post in posts_with_tag:
@@ -27,7 +28,7 @@ def tag_detail(request, tag_name):
 			'created_on': post.created_on,
 			'author': post.author.username,
             'thumbnail': post.thumbnail.url if post.thumbnail else '',
-            
+            'tags': post.tags.all(),
         }
 		posts_data.append(post_info)
 
