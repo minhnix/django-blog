@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Tag, Post
+from .models import Tag, Post, User
 from .forms import PostForm, SimpleForm
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -9,16 +9,15 @@ def index(request):
 	return render(request, 'index.html')
 
 def tag_index(request):
-	tags = Tag.objects.raw('''Select t.id, name, count(name) as count 
+	tags = Tag.objects.raw('''Select t.id, name, count(name) as count
 						from blog_tag t left join blog_post_tags pt 
 						on t.id = pt.tag_id group by t.id, name''')
-	print(tags)
 	return render(request, 'tag_index.html', {'tags': tags})
 
 def tag_detail(request, tag_name):
 	tag = Tag.objects.get(name=tag_name)
 	posts_with_tag = tag.posts.all()
-	# posts_with_tag = Post.objects.select_related('tags').filter(tags__id=tag.id)
+
 	posts_data = []
 	for post in posts_with_tag:
 		post_info = {
@@ -26,6 +25,8 @@ def tag_detail(request, tag_name):
             'title': post.title,
 			'created_on': post.created_on,
 			'author': post.author.username,
+            'thumbnail': post.thumbnail.url if post.thumbnail else '',
+            'tags': post.tags.all(),
         }
 		posts_data.append(post_info)
 
@@ -37,8 +38,36 @@ def tag_detail(request, tag_name):
     
 	return render(request, 'tag_detail.html', {'data': data})
 
+def post_index(request):
+    posts = Post.objects.all().select_related('author').prefetch_related('tags')
+    
+    data = []
+    for post in posts:
+        author = post.author  
+        tags = post.tags.all() 
+        
+        blog = {
+            'post': post,
+            'author': author,
+            'tags': tags,
+        }
+        
+        data.append(blog)
+    print(data)
+    theme = getattr(settings, "MARTOR_THEME", "bootstrap")
+    return render(request, "%s/post_index.html" % theme, {'posts': data})
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    author = get_object_or_404(User, id=post.author_id)
+
+    context = {"post": post,
+               "author": author}
+    
+    theme = getattr(settings, "MARTOR_THEME", "bootstrap")
+    return render(request, "%s/post_detail.html" % theme, context)
+
 def create_post(request):
-	return render(request, 'form.html')
+	return render(request, '../templates/boostrap/form.html')
 
 def home_redirect_view(request):
     return redirect("simple_form")

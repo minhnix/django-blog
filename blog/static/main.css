@@ -1,2 +1,144 @@
-div.martor-preview h1{font-size:28px !important;color:#c00 !important}
-div.martor-preview h2{font-size:24px !important;color:#c00 !important}
+div.martor-content  { height: full-screen; background-color: #ffffff !important ; margin: auto; color: #000000;}
+div.martor-preview {background: #f8fbfa !important; font-size: 1em;}
+/* div.martor-preview h1{font-size:40px !important;color:rgb(0, 0, 0) !important} */
+/* div.martor-preview h2{font-size:24px !important;color:rgb(0, 0, 0) !important} */
+/* styles.css */
+/* Thiết lập phông chữ và bố cục chung */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #000000;
+    background-color: #ffffff !important;
+    margin: 0;
+    height: full-screen;
+  }
+  
+  .main-content {
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Kiểu dáng cho tiêu đề chính */
+ /* Định dạng tiêu đề cấp 1 */
+h1 {
+  font-size: 2em;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.5em;
+}
+
+/* Định dạng tiêu đề cấp 2 */
+h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 0.5em;
+}
+
+/* Định dạng tiêu đề cấp 3 */
+h3 {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #777;
+  margin-bottom: 0.5em;
+}
+
+/* Định dạng văn bản in đậm */
+strong,
+b {
+  font-weight: bold;
+}
+
+/* Định dạng văn bản in nghiêng */
+em,
+i {
+  font-style: italic;
+}
+
+/* Định dạng danh sách không thứ tự */
+ul {
+  list-style-type: disc;
+  margin-left: 1.5em;
+}
+
+/* Định dạng danh sách có thứ tự */
+ol {
+  list-style-type: decimal;
+  margin-left: 1.5em;
+}
+
+/* Định dạng các mục trong danh sách */
+li {
+  margin-bottom: 0.5em;
+}
+
+/* Định dạng đoạn trích */
+blockquote {
+  margin-left: 1em;
+  padding-left: 1em;
+  border-left: 2px solid #ccc;
+  color: #777;
+  font-style: italic;
+}
+
+/* Định dạng đường link */
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Định dạng hình ảnh */
+img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 1em;
+  margin: auto;
+}
+
+/* Định dạng đoạn code */
+pre {
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  padding: 1em;
+  overflow: auto;
+}
+
+code {
+  font-family: Consolas, monospace;
+}
+
+/* Định dạng bảng */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 0.5em;
+}
+
+th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+/* Định dạng đường phân cách */
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 1em 0;
+}
+
+/* Định dạng kết thúc của đoạn Markdown */
+.end-markdown {
+  font-style: italic;
+  color: #999;
+  margin-top: 2em;
+}
