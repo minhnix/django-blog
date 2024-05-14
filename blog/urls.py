@@ -4,7 +4,7 @@ from . import admin_views
 urlpatterns = [
     path('', views.index, name='index'),
     path('tags/', views.tag_index, name='tag_index'),
-    path('posts/', views.tag_index, name='posts'),
+    path('posts/', views.post_index, name='posts'),
     path('tags/<str:tag_name>/', views.tag_detail, name='tag_detail'),
     path('dashboard/', admin_views.index, name='dashboard'),
     path('dashboard/posts/', admin_views.post_index, name='admin_post'),

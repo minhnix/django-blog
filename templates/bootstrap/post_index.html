@@ -29,24 +29,26 @@
   rel="stylesheet"
 />
 
-{% endblock %} {% block content %}
+{% endblock %} 
+{% block content %} 
+{% for post in posts %} 
 <div class="martor-content">
   <h1 class="truncate text-6xl">
     <span class="truncate text-black font-bold text-6xl">
       {{ post.title }}
     </span>
   </h1>
-  {% comment %}
-  <p><b class="text-black">Description:</b></p>
-  {% endcomment %}
   <h3 class="text-blue-900">
-    Author: {{ author.username }}
-    <h5 class="text-black">{{post.created_on}}</h5>
+    Author: {{ post.author.username }}
+    <h5 class="text-black">{{post.post.created_on}}</h5>
   </h3>
   <hr />
-  <div class="martor-preview">{{ post.description|safe_markdown }}</div>
+  <div class="martor-preview">{{ post.post.description|safe_markdown }}</div>
 </div>
-{% endblock %} {% block js %}
+<hr class="" />
+
+{% endfor%} {% endblock %} 
+{% block js %}
 <script
   type="text/javascript"
   src="{% static 'plugins/js/highlight.min.js' %}"
