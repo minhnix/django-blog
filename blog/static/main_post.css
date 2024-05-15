@@ -1,5 +1,16 @@
-div.martor-content  { height: full-screen; background-color: #ffffff !important ; margin: auto; color: #000000; margin-bottom: 20px;}
-div.martor-preview {background: #f8fbfa !important; font-size: 1em;}
+div.martor-content {
+  width: 80%;
+  /* height: 100vh; */
+  background-color: #ffffff;
+  margin: auto;
+  color: #000000;
+  margin-bottom: 20px;
+  padding: 12px;
+  border: 1px solid #ffffff;
+  box-sizing: border-box; 
+  padding-bottom: 24px;
+}
+div.martor-preview {background: #ffffff !important; font-size: 1em;}
 /* div.martor-preview h1{font-size:40px !important;color:rgb(0, 0, 0) !important} */
 /* div.martor-preview h2{font-size:24px !important;color:rgb(0, 0, 0) !important} */
 /* styles.css */
@@ -15,7 +26,7 @@ body {
   
   .main-content {
     margin: 0 auto;
-    background-color: #fff;
+    background-color: #ffffff;
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }

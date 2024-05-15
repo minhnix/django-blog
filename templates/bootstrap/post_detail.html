@@ -31,20 +31,32 @@
 
 {% endblock %} {% block content %}
 <div class="martor-content">
+  <div class="flex flex-wrap mt-4">
+    {% for tag in tags %}
+    <a
+      href="{% url 'tag_detail' tag.name %}"
+      class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 hover:bg-gray-100 transition duration-100 ease-in-out hover:border-1"
+      >{{ tag.name }}</a
+    >
+    {% endfor %}
+  </div>
+  <h1 class="truncate text-6xl">
+    <span class="truncate text-black font-bold text-6xl"> {{ post.tag }} </span>
+  </h1>
   <h1 class="truncate text-6xl">
     <span class="truncate text-black font-bold text-6xl">
       {{ post.title }}
     </span>
   </h1>
-  {% comment %}
-  <p><b class="text-black">Description:</b></p>
-  {% endcomment %}
-  <h3 class="text-blue-900">
+  <h3 class="text-black">
     Author: {{ author.username }}
-    <h5 class="text-black">{{post.created_on}}</h5>
+    <h6 class="text-gray-600">{{post.created_on}}</h6>
   </h3>
   <hr />
   <div class="martor-preview">{{ post.description|safe_markdown }}</div>
+  <button class="btn btn-primary btn-lg" onclick="window.history.back()">
+    Back
+  </button>
 </div>
 {% endblock %} {% block js %}
 <script

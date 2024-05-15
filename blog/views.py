@@ -9,14 +9,18 @@ def index(request):
 	return render(request, 'index.html')
 
 def tag_index(request):
-	tags = Tag.objects.raw('''Select t.id, name, count(name) as count
-						from blog_tag t left join blog_post_tags pt 
-						on t.id = pt.tag_id group by t.id, name''')
+	tags = Tag.objects.raw('''
+                        SELECT t.id, t.name, COUNT(bp.id) AS count
+    FROM blog_tag t
+    LEFT JOIN blog_post_tags bpt ON t.id = bpt.tag_id
+    LEFT JOIN blog_post bp ON bpt.post_id = bp.id AND bp.published = 1
+    GROUP BY t.id, t.name
+''')
 	return render(request, 'tag_index.html', {'tags': tags})
 
 def tag_detail(request, tag_name):
 	tag = Tag.objects.get(name=tag_name)
-	posts_with_tag = tag.posts.all()
+	posts_with_tag = tag.posts.filter(published=True).order_by('-created_on').select_related('author').prefetch_related('tags')
 
 	posts_data = []
 	for post in posts_with_tag:
@@ -39,7 +43,7 @@ def tag_detail(request, tag_name):
 	return render(request, 'tag_detail.html', {'data': data})
 
 def post_index(request):
-    posts = Post.objects.all().select_related('author').prefetch_related('tags')
+    posts = Post.objects.all().select_related('author').prefetch_related('tags').filter(published=True).order_by('-created_on')
     
     data = []
     for post in posts:
@@ -57,11 +61,17 @@ def post_index(request):
     theme = getattr(settings, "MARTOR_THEME", "bootstrap")
     return render(request, "%s/post_index.html" % theme, {'posts': data})
 def post_detail(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
-    author = get_object_or_404(User, id=post.author_id)
+    
+    posts_query = Post.objects.filter(published=True).order_by('-created_on').select_related('author').prefetch_related('tags')
+    post = get_object_or_404(posts_query, id=post_id)
 
+    # print(post.tags)
+    
     context = {"post": post,
-               "author": author}
+               "author": post.author,
+               "tags": post.tags.all()}
+    
+    # print(context.post.tags)
     
     theme = getattr(settings, "MARTOR_THEME", "bootstrap")
     return render(request, "%s/post_detail.html" % theme, context)
