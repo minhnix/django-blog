@@ -23,32 +23,36 @@
   rel="stylesheet"
 />
 <link
-  href="{% static 'main.css' %}"
+  href="{% static 'main_post.css' %}"
   type="text/css"
   media="all"
   rel="stylesheet"
 />
-
-{% endblock %} 
-{% block content %} 
-{% for post in posts %} 
+{% endblock %} {% block content %} {% for post in posts %}
 <div class="martor-content">
+  <div class="flex flex-wrap mt-4">
+    {% for tag in post.tags %}
+    <a
+      href="{% url 'tag_detail' tag.name %}"
+      class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 hover:bg-gray-100 transition duration-100 ease-in-out hover:border-1"
+      >{{ tag.name }}</a
+    >
+    {% endfor %}
+  </div>
   <h1 class="truncate text-6xl">
     <span class="truncate text-black font-bold text-6xl">
-      {{ post.title }}
+      {{ post.post.title }}
     </span>
   </h1>
-  <h3 class="text-blue-900">
+  <h3 class="text-black">
     Author: {{ post.author.username }}
-    <h5 class="text-black">{{post.post.created_on}}</h5>
+    <h6 class="text-gray-600">{{post.post.created_on}}</h6>
   </h3>
   <hr />
   <div class="martor-preview">{{ post.post.description|safe_markdown }}</div>
 </div>
-<hr class="" />
 
-{% endfor%} {% endblock %} 
-{% block js %}
+{% endfor%} {% endblock %} {% block js %}
 <script
   type="text/javascript"
   src="{% static 'plugins/js/highlight.min.js' %}"

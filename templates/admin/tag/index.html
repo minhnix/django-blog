@@ -1,56 +1,46 @@
-{% extends "admin/layout/base.html" %} 
-{% load static %} 
-{% block title %}
-Tag
-{% endblock %} 
-
-{% block css %}
-
-<link rel="stylesheet" 
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
-integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
-crossorigin="anonymous" referrerpolicy="no-referrer"/>
-
-{% endblock %} 
-
-{% block content %}
-
+{% extends "admin/layout/base.html" %} {% load static %} {% block title %} Tag
+{% endblock %} {% block css %}
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+  integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+{% endblock %} {% block content %}
 <div class="card-body">
-    <h4>Tag List</h4>
+  <h4 class="text-lg font-semibold">Tag List</h4>
 
-    <a type="button" class="btn btn-success my-3" href="{%url 'admin_tag_create' %}">Create</a>
+  <a href="{% url 'admin_tag_create' %}" class="btn btn-success my-3">Create</a>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Name</th>
-                <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for tag in tags %}
-            <tr>
-                <td>{{ tag.id }}</td>
-                <td>{{ tag.name }}</td>
-                <td>
-                    <a type="button" class="btn btn-warning" href="/dashboard/tags/{{ tag.id }}/update">Update</a>
-                    <a type="button" class="btn btn-danger" href="/dashboard/tags/{{ tag.id }}/delete">Delete</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
+  <div class="overflow-x-auto">
+    <table class="table-auto w-full border-collapse">
+      <thead>
+        <tr>
+          <th class="px-4 py-2 border">Id</th>
+          <th class="px-4 py-2 border">Name</th>
+          <th class="px-4 py-2 border">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tag in tags %}
+        <tr>
+          <td class="px-4 py-2 border">{{ tag.id }}</td>
+          <td class="px-4 py-2 border">{{ tag.name }}</td>
+          <td class="px-4 py-2 border">
+            <a
+              href="/dashboard/tags/{{ tag.id }}/update"
+              class="btn btn-warning mr-2"
+              >Update</a
+            >
+            <a href="/dashboard/tags/{{ tag.id }}/delete" class="btn btn-danger"
+              >Delete</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
+  </div>
 </div>
-
-
-{% endblock %} 
-{% block js %}
-{% comment %} <script type="text/javascript" src="{% static 'plugins/js/ace.js' %}"></script> {% endcomment %}
-<script>
-    $('form [name="title"]').attr({
-        class: "form-control",
-        placeholder: "Post Title",
-    });
-</script>
-{% endblock %}
+{% endblock %} {% block js %} {% endblock %}
