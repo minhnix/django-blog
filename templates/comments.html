@@ -1,0 +1,22 @@
+<div id="comment-{{comment.id}}" style="margin-left: {{ level|default:0 }}px; margin-top: 10px; border: 1px solid #ddd; padding: 10px;">
+    <p>{{ comment.content }}</p>
+    <p><small>{{ comment.created_on }}</small></p>
+    <a href="#reply-{{ comment.id }}" onclick="$('#reply-form-{{ comment.id }}').toggle();">Reply</a>
+    <div id="reply-form-{{ comment.id }}" style="display:none;">
+        <form method="post" class="ajax-comment-form">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <input type="hidden" name="parent_id" value="{{ comment.id }}">
+            <button type="submit">Reply</button>
+        </form>
+    </div>
+
+    {% if comment.replies.all %}
+        <div id="replies-{{ comment.id }}" style="display:none; margin-left: 20px;">
+            {% for reply in comment.replies.all %}
+                {% include "comments.html" with comment=reply level=20 %}
+            {% endfor %}
+        </div>
+        <button id="show-replies-{{ comment.id }}" onclick="$('#replies-{{ comment.id }}').toggle(); this.innerText = this.innerText === 'Show more' ? 'Show less' : 'Show more';">Show more</button>
+    {% endif %}
+</div>

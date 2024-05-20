@@ -57,6 +57,21 @@
   <button class="btn btn-primary btn-lg" onclick="window.history.back()">
     Back
   </button>
+  <h2>Comments</h2>
+  <div class="comment-section">
+      {% for comment in comments %}
+          {% include "comments.html" with comment=comment level=0 %}
+      {% endfor %}
+  </div>
+
+  <h2>Leave a comment</h2>
+  <form method="post" class="ajax-comment-form">
+      {% csrf_token %}
+      {{ comment_form.as_p }}
+      <button type="submit">Add Comment</button>
+  </form>
+
+
 </div>
 {% endblock %} {% block js %}
 <script
@@ -68,4 +83,58 @@
     hljs.highlightBlock(block);
   });
 </script>
+<script>
+  $(document).ready(function() {
+      $('.ajax-comment-form').on('submit', function(event) {
+          event.preventDefault();
+          var $form = $(this);
+          $.ajax({
+              type: $form.attr('method'),
+              url: $form.attr('action'),
+              data: $form.serialize(),
+              success: function(response) {
+                  if (response.parent_id) {
+                    var newCommentHtml = `
+                    <div style="margin-left: 20px; margin-top: 10px; border: 1px solid #ddd; padding: 10px;">
+                        <p>${response.content}</p>
+                        <p><small>${response.created_on}</small></p>
+                    </div>
+                `;
+                      var $parentReplies = $('#replies-' + response.parent_id);
+                      if ($parentReplies.length) {
+                          $parentReplies.append(newCommentHtml);
+                          $parentReplies.show();
+                      } else {
+                        let $parrentComment = $(`#comment-${response.parent_id}`);
+                        $parrentComment.append(
+                          `
+                          <div id=replies-${response.id} style=" margin-left: 40px; margin-top: 10px; border: 1px solid #ddd; padding: 10px;">
+                            <p>${response.content}</p>
+                            <p><small>${response.created_on}</small></p>
+                        </div>
+    
+                          <button id="show-replies-${response.id}" onclick="$('#replies-${response.id}').toggle(); this.innerText = this.innerText === 'Show more' ? 'Show less' : 'Show more';">Show less</button>
+                          `
+                        )
+                      }
+                  } else {
+                    var newCommentHtml = `
+                    <div style="margin-left: 0px; margin-top: 10px; border: 1px solid #ddd; padding: 10px;">
+                        <p>${response.content}</p>
+                        <p><small>${response.created_on}</small></p>
+                    </div>
+                `;
+                      $('.comment-section').append(newCommentHtml);
+                  }
+                  $form[0].reset();
+                  // $form.parent().hide();
+              },
+              error: function(xhr, errmsg, err) {
+                  console.log(xhr.status + ": " + xhr.responseText);
+              }
+          });
+      });
+  });
+  </script>
+
 {% endblock %}

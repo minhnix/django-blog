@@ -1,4 +1,4 @@
-from .models import Post, Tag
+from .models import Post, Tag, Comment
 from django import forms
 
 from martor.fields import MartorFormField
@@ -32,3 +32,9 @@ class TagForm(forms.ModelForm):
     class Meta:
         model = Tag
         fields = "__all__"
+
+class CommentForm(forms.ModelForm):
+    parent_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+    class Meta:
+        model = Comment
+        fields = ('content', 'parent_id')

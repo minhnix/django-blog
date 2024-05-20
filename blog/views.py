@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Tag, Post, User
-from .forms import PostForm, SimpleForm
+from .models import Tag, Post, User, Comment
+from .forms import PostForm, SimpleForm, CommentForm
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import logout, login, authenticate
+from django.http import JsonResponse
 
 def index(request):
 	return render(request, 'index.html')
@@ -86,10 +87,37 @@ def post_detail(request, post_id):
     post = get_object_or_404(posts_query, id=post_id)
 
     # print(post.tags)
-    
+    comments = post.comments.filter(parent__isnull=True)
+    new_comment = None
+
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        print(request.POST)
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.post = post
+            parent_id = comment_form.cleaned_data.get('parent_id')
+            if parent_id:
+                new_comment.parent = Comment.objects.get(id=parent_id)
+            new_comment.save()
+
+            return JsonResponse({
+                'id': new_comment.id,
+                'content': new_comment.content,
+                'created_on': new_comment.created_on.strftime('%Y-%m-%d %H:%M:%S'),
+                'parent_id': new_comment.parent.id if new_comment.parent else None,
+                'post_id': new_comment.post.id,
+            })
+
+    comment_form = CommentForm()
+
     context = {"post": post,
-               "author": post.author,
-               "tags": post.tags.all()}
+                "author": post.author,
+                "tags": post.tags.all(),
+                'new_comment': new_comment,
+                'comment_form': comment_form,
+                'comments': comments,
+    }
     
     # print(context.post.tags)
     
