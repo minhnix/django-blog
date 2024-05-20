@@ -4,9 +4,29 @@ from .forms import PostForm, SimpleForm
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth import logout, login, authenticate
 
 def index(request):
 	return render(request, 'index.html')
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('dashboard')
+        else:
+            messages.error(request, "Tài khoản hoặc mật khẩu không đúng")
+            return redirect("/login")
+
+    return render(request, 'login.html')
+
+def logout_f(request):
+    logout(request)
+    return redirect('/')
+
 
 def tag_index(request):
 	tags = Tag.objects.raw('''

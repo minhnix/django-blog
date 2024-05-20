@@ -3,6 +3,8 @@ from . import views
 from . import admin_views
 urlpatterns = [
     path('', views.index, name='index'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_f, name='logout'),
     path('tags/', views.tag_index, name='tag_index'),
     path('posts/', views.post_index, name='posts'),
     path('tags/<str:tag_name>/', views.tag_detail, name='tag_detail'),

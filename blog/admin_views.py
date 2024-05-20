@@ -7,6 +7,7 @@ from django.contrib import messages
 import random
 import string
 
+@login_required(login_url='/login/')
 def index(request):
     return redirect("/dashboard/posts")
 
@@ -15,17 +16,19 @@ def randomID(num = 8):
     random_string = ''.join(random.choices(characters, k = num))
     return random_string
 
+@login_required(login_url='/login/')
 def post_index(request):
     posts = Post.objects.all()
     return render(request, 'admin/post/index.html', {'posts': posts})
 
+@login_required(login_url='/login/')
 def create_post(request):
     if request.method == "POST":
             form = PostForm(request.POST, request.FILES)
         # if form.is_valid():
             post = form.save(commit=False)
             # post.author = request.user
-            post.author = User.objects.get(id=1)
+            post.author = User.objects.get(username=request.user.username)
             post.url = post.title.replace(" ", "-").lower() + "-" + randomID()
             post.save()
             tag_names = form.cleaned_data['tag_names'].split(',')  # Tách các tag thành danh sách
@@ -40,6 +43,7 @@ def create_post(request):
         context = {"form": form, "title": "Post Form"}
     return render(request, "admin/post/form.html", context)
 
+@login_required(login_url='/login/')
 def update_post(request, post_id):
     post = Post.objects.get(id=post_id)
     form = PostForm(initial={"title": post.title, "description": post.description, "thumbnail": post.thumbnail, "id": post.id, "tag_names": ", ".join([tag.name for tag in post.tags.all()])})
@@ -59,7 +63,7 @@ def update_post(request, post_id):
     
     return render(request, "admin/post/form.html", {"form": form, "thumbnail": thumbnail})
 
-
+@login_required(login_url='/login/')
 def published_post(request, post_id, is_published):
     post = get_object_or_404(Post, id=post_id)
     if is_published == 'True':
@@ -71,6 +75,7 @@ def published_post(request, post_id, is_published):
         
     return redirect("/dashboard/posts")
 
+@login_required(login_url='/login/')
 def delete_post(request, post_id):
     post = Post.objects.get(id=post_id)
     try:
@@ -80,11 +85,12 @@ def delete_post(request, post_id):
     messages.success(request, "Post with id %s successfully deleted." % post_id)
     return redirect('/dashboard/posts')
 
+@login_required(login_url='/login/')
 def tag_index(request):
     tags = Tag.objects.all().order_by('id')
     return render(request, 'admin/tag/index.html', {'tags': tags})
 
-
+@login_required(login_url='/login/')
 def create_tag(request):
     if request.method == "POST":
             form = TagForm(request.POST)
@@ -103,6 +109,7 @@ def create_tag(request):
 
     return render(request, "admin/tag/form.html", context)
 
+@login_required(login_url='/login/')
 def update_tag(request, id):
     tag = Tag.objects.get(id=id)
     form = TagForm(initial={"name": tag.name, "id": tag.id})
@@ -119,6 +126,7 @@ def update_tag(request, id):
 
     return render(request, "admin/tag/form.html", {"form": form})
 
+@login_required(login_url='/login/')
 def delete_tag(request, id):
     tag = Tag.objects.get(id=id)
     try:

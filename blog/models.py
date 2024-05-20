@@ -1,6 +1,6 @@
 from django.db import models
 from martor.models import MartorField
-
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class Tag(models.Model):
@@ -22,12 +22,10 @@ class Post(models.Model):
     def __str__(self):
         return self.title
     
-class User(models.Model):
-    username = models.CharField(max_length=100, unique=True)
-    email = models.EmailField(max_length=100, unique=True)
-    password = models.CharField(max_length=100)
+class User(AbstractUser):
     def __str__(self):
         return self.username
+    
 
 class Comment(models.Model):
     post = models.ForeignKey("Post", on_delete=models.CASCADE)
