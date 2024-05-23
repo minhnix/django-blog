@@ -1,4 +1,84 @@
-<div id="comment-{{comment.id}}" style="margin-left: {{ level|default:0 }}px; margin-top: 10px; border: 1px solid #ddd; padding: 10px;">
+{% load static %}
+
+<article id="comment-{{comment.id}}" class="text-base bg-white rounded-lg mb-3" style="margin-left: {{ level|default:0 }}px;">
+    <div class="flex justify-between items-center">
+        <div class="flex items-center">
+            <p class="inline-flex mb-0 items-center mr-3 text-sm text-gray-900 font-semibold"><img
+                    class="mr-2 w-8 h-8 rounded-full"
+                    src="{% static 'images/profile-circle.svg' %}"
+                    alt="Anonymous user">Anonymous user</p>
+            <p class="mb-0 text-sm text-gray-600"><time pubdate datetime="{{comment.created_on}}"
+                    title="{{comment.created_on}}">{{comment.created_on}}</time></p>
+        </div>
+        <button id="dropdownComment-{{comment.id}}-Button" data-dropdown-toggle="dropdownComment-{{comment.id}}"
+            class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50"
+            type="button">
+            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 3">
+                <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/>
+            </svg>
+            <span class="sr-only">Comment settings</span>
+        </button>
+        <!-- Dropdown menu -->
+        <div id="dropdownComment-{{comment.id}}"
+            class="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow">
+            <ul class="py-1 text-sm text-gray-700"
+                aria-labelledby="dropdownMenuIconHorizontalButton">
+                <li>
+                    <a href="#"
+                        class="block py-2 px-4 hover:bg-gray-100">Edit</a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="block py-2 px-4 hover:bg-gray-100">Remove</a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="block py-2 px-4 hover:bg-gray-100">Report</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <p class="mb-1 text-gray-500">{{comment.content}}</p>
+    <div class="flex items-center space-x-4 ">
+        <button type="button" onclick="$('#reply-form-{{ comment.id }}').toggle(); $('#reply-form-{{ comment.id }} textarea')[0].focus();"
+            class="text-blue-500 flex items-center text-sm hover:underline font-medium">
+            <svg class="mr-1.5 w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5h5M5 8h2m6-3h2m-5 3h6m2-7H2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h3v5l5-5h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z"/>
+            </svg>
+            Reply
+        </button>
+        {% if comment.replies.all %}
+        <button class="text-blue-500 flex items-center text-sm hover:underline font-medium" id="show-replies-{{ comment.id }}" onclick="$('#replies-{{ comment.id }}').toggle(); this.innerText = this.innerText === 'Show more' ? 'Show less' : 'Show more';">Show more</button>
+        {% endif %}
+    </div>
+    {% if comment.replies.all %}
+        <div id="replies-{{ comment.id }}" style="display:none;">
+            {% for reply in comment.replies.all %}
+                {% include "comments.html" with comment=reply level=40 %}
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div id="reply-form-{{ comment.id }}" style="display:none; margin-top: 6px; margin-left: {{ level|default:40 }}px;">
+        <form method="post" class="ajax-comment-form mb-6">
+            {% csrf_token %}
+            <div class="py-2 px-4 mb-2 bg-white rounded-lg rounded-t-lg border border-gray-200">
+                <label for="comment" class="sr-only">Your comment</label>
+                {{ comment_form.content|default_if_none:'' }}
+                <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                <textarea name="content" id="comment" rows="1"
+                    class="px-0 w-full text-gray-900 border-0 focus:ring-0 focus:outline-none"
+                    placeholder="Write a comment..." required></textarea>
+            </div>
+            <button type="submit"
+                class="inline-flex items-center py-2 px-4 text-center btn-primary rounded-lg focus:ring-4 focus:ring-[#bfdbfe] hover:bg-[#1e40af]">
+                Post comment
+            </button>
+        </form>
+    </div>
+</article>
+
+
+{% comment %} <div id="comment-{{comment.id}}" style="margin-left: {{ level|default:0 }}px; margin-top: 10px; border: 1px solid #ddd; padding: 10px;">
     <p>{{ comment.content }}</p>
     <p><small>{{ comment.created_on }}</small></p>
     <a href="#reply-{{ comment.id }}" onclick="$('#reply-form-{{ comment.id }}').toggle();">Reply</a>
@@ -19,4 +99,4 @@
         </div>
         <button id="show-replies-{{ comment.id }}" onclick="$('#replies-{{ comment.id }}').toggle(); this.innerText = this.innerText === 'Show more' ? 'Show less' : 'Show more';">Show more</button>
     {% endif %}
-</div>
+</div> {% endcomment %}

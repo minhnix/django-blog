@@ -35,6 +35,8 @@ class TagForm(forms.ModelForm):
 
 class CommentForm(forms.ModelForm):
     parent_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+    content = forms.CharField(widget=forms.HiddenInput())  # Hidden because we'll use direct HTML
+
     class Meta:
         model = Comment
         fields = ('content', 'parent_id')

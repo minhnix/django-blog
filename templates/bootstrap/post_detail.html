@@ -58,18 +58,26 @@
     Back
   </button>
   <h2>Comments</h2>
+  <form method="post" class="ajax-comment-form mb-6">
+    {% csrf_token %}
+    <div class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200">
+        <label for="comment" class="sr-only">Your comment</label>
+        {{ comment_form.content|default_if_none:'' }}
+        <textarea name="content" id="comment" rows="4"
+            class="px-0 w-full text-gray-900 border-0 focus:ring-0 focus:outline-none"
+            placeholder="Write a comment..." required></textarea>
+    </div>
+    <button type="submit"
+        class="inline-flex items-center py-2 px-4 text-center btn-primary rounded-lg focus:ring-4 focus:ring-[#bfdbfe] hover:bg-[#1e40af]">
+        Post comment
+    </button>
+  </form>
   <div class="comment-section">
       {% for comment in comments %}
           {% include "comments.html" with comment=comment level=0 %}
       {% endfor %}
   </div>
 
-  <h2>Leave a comment</h2>
-  <form method="post" class="ajax-comment-form">
-      {% csrf_token %}
-      {{ comment_form.as_p }}
-      <button type="submit">Add Comment</button>
-  </form>
 
 
 </div>
@@ -84,6 +92,31 @@
   });
 </script>
 <script>
+  getCommentHtml = function (comment, margin_left) {
+    return `
+    <article id="comment-${comment.id}" class="text-base bg-white rounded-lg mb-3" style="margin-left: ${margin_left}px;">
+      <div class="flex justify-between items-center">
+          <div class="flex items-center">
+              <p class="inline-flex mb-0 items-center mr-3 text-sm text-gray-900 font-semibold"><img
+                      class="mr-2 w-8 h-8 rounded-full"
+                      src="{% static 'images/profile-circle.svg' %}"
+                      alt="Anonymous user">Anonymous user</p>
+              <p class="mb-0 text-sm text-gray-600"><time pubdate datetime="${comment.created_on}"
+                      title="${comment.created_on}">${comment.created_on}</time></p>
+          </div>
+          <button id="dropdownComment-${comment.id}-Button" data-dropdown-toggle="dropdownComment-${comment.id}"
+              class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50"
+              type="button">
+              <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 3">
+                  <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/>
+              </svg>
+              <span class="sr-only">Comment settings</span>
+          </button>
+      </div>
+      <p class="mb-1 text-gray-500">${comment.content}</p>
+  </article>
+  `;
+  };
   $(document).ready(function() {
       $('.ajax-comment-form').on('submit', function(event) {
           event.preventDefault();
@@ -102,7 +135,7 @@
                 `;
                       var $parentReplies = $('#replies-' + response.parent_id);
                       if ($parentReplies.length) {
-                          $parentReplies.append(newCommentHtml);
+                          $parentReplies.append(getCommentHtml(response, 40));
                           $parentReplies.show();
                       } else {
                         let $parrentComment = $(`#comment-${response.parent_id}`);
@@ -124,7 +157,7 @@
                         <p><small>${response.created_on}</small></p>
                     </div>
                 `;
-                      $('.comment-section').append(newCommentHtml);
+                      $('.comment-section').append(getCommentHtml(response, 0));
                   }
                   $form[0].reset();
                   // $form.parent().hide();
