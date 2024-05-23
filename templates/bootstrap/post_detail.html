@@ -54,9 +54,9 @@
   </h3>
   <hr />
   <div class="martor-preview">{{ post.description|safe_markdown }}</div>
-  <button class="btn btn-primary btn-lg" onclick="window.history.back()">
+  {% comment %} <button class="btn btn-primary btn-lg" onclick="window.history.back()">
     Back
-  </button>
+  </button> {% endcomment %}
   <h2>Comments</h2>
   <form method="post" class="ajax-comment-form mb-6">
     {% csrf_token %}
@@ -77,9 +77,6 @@
           {% include "comments.html" with comment=comment level=0 %}
       {% endfor %}
   </div>
-
-
-
 </div>
 {% endblock %} {% block js %}
 <script
