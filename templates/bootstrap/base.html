@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
-    <title>{% block title %}Martor{% endblock %}</title>
+    <title>{% block title %}Blog{% endblock %}</title>
     {% block css %}
     <style>
       nav {
@@ -35,6 +35,7 @@
         >
       </div>
     </nav>
+  </body>
 
     <div class="container mx-auto mt-12">
       {% block messages %} {% if messages %}
@@ -60,5 +61,4 @@
       type="text/javascript"
     ></script>
     {% block js %}{% endblock %}
-  </body>
 </html>

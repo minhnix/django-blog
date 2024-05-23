@@ -1,4 +1,4 @@
-{% extends "admin/layout/base.html" %} {% load static %} {% block title %} Tag
+{% extends "admin/layout/base.html" %} {% load static %} {% block title %} Tags
 {% endblock %} {% block css %}
 <link
   rel="stylesheet"
@@ -8,6 +8,8 @@
   referrerpolicy="no-referrer"
 />
 {% endblock %} {% block content %}
+<body style ="background: #fff">
+
 <div class="card-body">
   <h4 class="text-lg font-semibold">Tag List</h4>
 
@@ -43,4 +45,5 @@
     </table>
   </div>
 </div>
+</body>
 {% endblock %} {% block js %} {% endblock %}

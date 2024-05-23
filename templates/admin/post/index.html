@@ -1,4 +1,4 @@
-{% extends "admin/layout/base.html" %} {% load static %} {% block title %} Post
+{% extends "admin/layout/base.html" %} {% load static %} {% block title %} Posts
 {% endblock %} {% block css %}
 <link
   rel="stylesheet"
@@ -7,11 +7,8 @@
   crossorigin="anonymous"
   referrerpolicy="no-referrer"
 />
-<link
-href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-rel="stylesheet"
-/>
 {% endblock %} {% block content %}
+<body style ="background: #fff">
 <div class="card-body">
   <h4 class="text-lg font-semibold">Post List</h4>
 
@@ -75,4 +72,5 @@ rel="stylesheet"
     </table>
   </div>
 </div>
+</body>
 {% endblock %}

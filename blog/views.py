@@ -8,7 +8,7 @@ from django.contrib.auth import logout, login, authenticate
 from django.http import JsonResponse
 
 def index(request):
-	return render(request, 'index.html')
+    return redirect('posts')
 
 def login_view(request):
     if request.method == 'POST':
