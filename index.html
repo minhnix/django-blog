@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        display: flex;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #4caf50;
+        color: white;
+        cursor: pointer;
+    }
+
+    .btn-off {
+        background-color: #f44336;
+    }
+</style>
+
+<body>
+    <h2>ON / OFF LED</h2>
+    <button class="btn-status">
+        ON
+    </button>
+
+    <script>
+        const btn = document.querySelector('.btn-status');
+        let status = true;
+
+        btn.addEventListener('click', () => {
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    if (xhr.responseText == "0") {
+                        btn.innerHTML = "TURN ON LED"
+                        btn.classList.add('btn-off')
+                    } else {
+                        btn.innerHTML = "TURN OFF LED"
+                        btn.classList.remove('btn-off')
+
+                    }
+                }
+            }
+            xhr.open('GET', '/LEDstatus', true);
+            xhr.send();
+        });
+    </script>
+</body>
+
+</html>

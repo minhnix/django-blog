@@ -52,7 +52,8 @@
             {% endif %}
           </td>
           <td class="border px-4 py-2 flex space-x-2">
-            <a href="#" class="btn btn-success">Xem</a>
+            {% comment %} <a href="post/{{post.id}}" class="btn btn-success">Xem</a> {% endcomment %}
+            <a href="{% url 'post' post.id %}" class="btn btn-success">Xem</a>
             <a
               href="/dashboard/posts/{{ post.id }}/update"
               class="btn btn-warning"

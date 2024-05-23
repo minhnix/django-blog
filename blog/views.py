@@ -65,22 +65,30 @@ def tag_detail(request, tag_name):
 
 def post_index(request):
     posts = Post.objects.all().select_related('author').prefetch_related('tags').filter(published=True).order_by('-created_on')
-    
     data = []
+
     for post in posts:
-        author = post.author  
-        tags = post.tags.all() 
-        
-        blog = {
-            'post': post,
-            'author': author,
-            'tags': tags,
+        tags = post.tags.all()  # Lấy tất cả các tags liên quan đến bài viết
+        tag_names = [tag.name for tag in tags]  # Tạo danh sách tên các tag (use tag.name instead of tag)
+
+        post_info = {
+            'id': post.id,
+            'title': post.title,
+            'created_on': post.created_on,
+            'author': post.author.username,
+            'tags': tag_names,  # Sử dụng danh sách tên các tag
+            'thumbnail': post.thumbnail.url if post.thumbnail else '',
         }
         
-        data.append(blog)
-    print(data)
-    theme = getattr(settings, "MARTOR_THEME", "bootstrap")
-    return render(request, "%s/post_index.html" % theme, {'posts': data})
+        print(post_info['tags'])  # Access the tags using the dictionary key
+        data.append(post_info)
+
+    context = {
+        'posts': data,
+    }
+
+    return render(request, 'bootstrap/post_index.html', {'data': context})
+
 def post_detail(request, post_id):
     
     posts_query = Post.objects.filter(published=True).order_by('-created_on').select_related('author').prefetch_related('tags')
