@@ -120,37 +120,49 @@
   $(document).ready(function() {
       $('.ajax-comment-form').on('submit', function(event) {
           event.preventDefault();
-          var $form = $(this);
+          let $form = $(this);
           $.ajax({
               type: $form.attr('method'),
               url: $form.attr('action'),
               data: $form.serialize(),
               success: function(response) {
                   if (response.parent_id) {
-                    var newCommentHtml = `
+                    let newCommentHtml = `
                     <div style="margin-left: 20px; margin-top: 10px; border: 1px solid #ddd; padding: 10px;">
                         <p>${response.content}</p>
                         <p><small>${response.created_on}</small></p>
                     </div>
-                `;
-                      var $parentReplies = $('#replies-' + response.parent_id);
+                    `;
+                      let $parentReplies = $('#replies-' + response.parent_id);
                       if ($parentReplies.length) {
                           $parentReplies.append(getCommentHtml(response, 40));
                           $parentReplies.show();
                       } else {
-                        let $parrentComment = $(`#comment-${response.parent_id}`);
-                        $parrentComment.append(
-                          `
-                          <div id=replies-${response.id} style=" margin-left: 40px; margin-top: 10px; border: 1px solid #ddd; padding: 10px;">
-                            <p>${response.content}</p>
-                            <p><small>${response.created_on}</small></p>
-                        </div>
-    
-                          <button id="show-replies-${response.id}" onclick="$('#replies-${response.id}').toggle(); this.innerText = this.innerText === 'Show more' ? 'Show less' : 'Show more';">Show less</button>
-                          `
-                        )
-                      }
-                  } else {
+                          let $parrentComment = $(`#comment-${response.parent_id}`);
+                          /* $parrentComment.append(
+                            `
+                            <div id=replies-${response.id} style=" margin-left: 40px; margin-top: 10px; border: 1px solid #ddd; padding: 10px;">
+                              <p>${response.content}</p>
+                              <p><small>${response.created_on}</small></p>
+                          </div>
+      
+                            <button id="show-replies-${response.id}" onclick="$('#replies-${response.id}').toggle(); this.innerText = this.innerText === 'Show more' ? 'Show less' : 'Show more';">Show less</button>
+                            `
+                          ) */
+                          let commentHtml = `<div id="replies-${ response.parent_id }" style="display:block;"> 
+                                      ${getCommentHtml(response, 40)}
+                                      </div>  
+                            `;
+                          $parrentComment.append(commentHtml);
+                          let $childDiv = $parrentComment.find('.flex.items-center.space-x-4.mb-1');
+                          console.log($childDiv)
+                          if ($childDiv.length) {
+                            console.log("CCCC")
+                            $childDiv.append(`<button class="text-blue-500 flex items-center text-sm hover:underline font-medium" id="show-replies-${ response.parent_id }" onclick="$('#replies-${ response.parent_id }').toggle(); this.innerText = this.innerText === 'Show more' ? 'Show less' : 'Show more';">Show less</button> `)
+                          }
+                        }
+                      } 
+                  else {
                     var newCommentHtml = `
                     <div style="margin-left: 0px; margin-top: 10px; border: 1px solid #ddd; padding: 10px;">
                         <p>${response.content}</p>
@@ -160,7 +172,7 @@
                       $('.comment-section').append(getCommentHtml(response, 0));
                   }
                   $form[0].reset();
-                  // $form.parent().hide();
+                  //$form[0].parent().hide();
               },
               error: function(xhr, errmsg, err) {
                   console.log(xhr.status + ": " + xhr.responseText);
