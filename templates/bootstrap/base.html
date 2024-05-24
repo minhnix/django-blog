@@ -96,7 +96,15 @@
         <ul class="nav-links">
             <li><a href="/posts">Posts</a></li>
             <li><a href="/tags">Tags</a></li>
+        {% if request.user.is_authenticated == True %}
+        <li>
+            <a href="/dashboard" class="text-white font-bold">
+                Dashboard
+            </a>
+        </li>
+        {% endif %}
         </ul>
+
         <form action="{% url 'posts_search' %}" class="search-form" method="GET">
           <input id="searchInput" type="text" class="search-input" name="keyword" placeholder="Search...">
           <button type="submit" class="search-button">Search</button>
@@ -110,6 +118,7 @@
             Logout
         </a>
         {% endif %}
+
     </div>
 </nav>
 
