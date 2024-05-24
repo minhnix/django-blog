@@ -101,7 +101,15 @@
           <input id="searchInput" type="text" class="search-input" name="keyword" placeholder="Search...">
           <button type="submit" class="search-button">Search</button>
       </form>
-        <a href="/login" class="text-white font-bold">Log in</a>
+      {% if request.user.is_authenticated == False %}
+        <a href="/login" class="text-white font-bold">
+            Login
+        </a>
+        {% else %}
+        <a href="/logout" class="text-white font-bold">
+            Logout
+        </a>
+        {% endif %}
     </div>
 </nav>
 
