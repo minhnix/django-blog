@@ -1,4 +1,5 @@
-{% extends "admin/layout/base.html" %} {% load static %} {% block css %}
+{% extends "admin/layout/base.html" %} {% load static %}{% block title %} Post
+{% endblock %}  {% block css %}
 <link
     href="{% static 'plugins/css/ace.min.css' %}"
     type="text/css"
@@ -17,37 +18,90 @@
     media="all"
     rel="stylesheet"
 />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: Arial, sans-serif;
+        }
+        .form {
+            max-width: 80%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .form-group input, 
+        .form-group textarea, 
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, 
+        .form-group textarea:focus, 
+        .form-group select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .form-group img {
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+            padding: 0.75rem 1.25rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+    </style>
 {% endblock %} {% block content %}
-<form class="form" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="form-group">
-        <label for="id_title">Title:</label>
-        {{ form.title }}
-    </div>
-    <div class="form-group">
-        <label for="id_thumbnail">Thumbnail:</label>
-        <br>
-        {% if thumbnail %}
-            <img src="{{ thumbnail }}" alt="Thumbnail" style=" height: 100px">
-            <br>
-        {% endif %}
+<body>
+    <form class="form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_title">Title:</label>
+            {{ form.title }}
+        </div>
+        <div class="form-group">
+            <label for="id_thumbnail">Thumbnail:</label>
+            {% if thumbnail %}
+                <img src="{{ thumbnail }}" alt="Thumbnail" style="height: 100px;">
+            {% endif %}
             {{ form.thumbnail }}
-        <img id="thumbnail-preview" src="{{ thumbnail }}" alt="Thumbnail Preview" style="display: none; width: 200px; height: auto;">
-    </div>
-
-    <div class="form-group">
-        <label for="id_content">Tags:</label>
-        {{ form.tag_names }}
-    </div>
-    <div class="form-group">
-        {{ form.description }}
-    </div>
-    <div class="form-group">
-        <button class="btn btn-success">
-            <i class="save icon"></i> Save Post
-        </button>
-    </div>
-</form>
+            <img id="thumbnail-preview" src="{{ thumbnail }}" alt="Thumbnail Preview" style="display: none; width: 200px; height: auto;">
+        </div>
+        <div class="form-group">
+            <label for="id_content">Tags:</label>
+            {{ form.tag_names }}
+        </div>
+        <div class="form-group">
+            {{ form.description }}
+        </div>
+        <div class="form-group text-center">
+            <button class="btn btn-success">
+                <i class="save icon"></i> Save Post
+            </button>
+        </div>
+    </form>
 {% endblock %} {% block js %}
 <script type="text/javascript" src="{% static 'plugins/js/ace.js' %}"></script>
 <script

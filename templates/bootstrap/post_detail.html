@@ -1,4 +1,4 @@
-{% extends "bootstrap/base.html" %} {% load static %} {% load martortags %}
+{% load static %} {% load martortags %}
 {%block title %} Blog post {% endblock %} {% block css%}
 <link
   href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
@@ -29,8 +29,8 @@
   rel="stylesheet"
 />
 
-{% endblock %} {% block content %}
-<div class="martor-content">
+{% endblock %} {% block content %}{% include "bootstrap/base.html" %}
+<div class="martor-content mx-auto pt-12 mt-4" style="width: 60%">
   <div class="flex flex-wrap mt-4">
     {% for tag in tags %}
     <a
@@ -54,9 +54,6 @@
   </h3>
   <hr />
   <div class="martor-preview">{{ post.description|safe_markdown }}</div>
-  <button class="btn btn-primary btn-lg" onclick="window.history.back()">
-    Back
-  </button>
   <h2>Comments</h2>
   <form method="post" class="ajax-comment-form mb-6">
     {% csrf_token %}
@@ -77,10 +74,12 @@
           {% include "comments.html" with comment=comment level=0 %}
       {% endfor %}
   </div>
-
-
-
 </div>
+<footer class="mx-auto mt-32 w-full max-w-container px-4 sm:px-6 lg:px-8">
+  <div class="border-t border-slate-900/5 pb-5 pt-10">
+    <p class="text-center text-sm leading-6 text-slate-500">© 2024 N1X Vinh. All rights reserved.</p>
+  </div>
+</footer>
 {% endblock %} {% block js %}
 <script
   type="text/javascript"

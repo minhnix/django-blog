@@ -1,22 +1,32 @@
-div.martor-content  { height: full-screen; background-color: #ffffff !important ; margin: auto; color: #000000; margin-bottom: 20px;}
-div.martor-preview {background: #f8fbfa !important; font-size: 1em;}
+div.martor-content  { 
+  height: full-screen; 
+  background-color: #ffffff!important ; 
+  /* margin: auto;  */
+  color: #000000;
+   margin-bottom: 20px;
+   padding: 0px !important;
+  border-radius: 12px;
+  }
+   
+div.martor-preview {background: #ffffff !important; font-size: 1em; padding: 0px !important;}
 /* div.martor-preview h1{font-size:40px !important;color:rgb(0, 0, 0) !important} */
 /* div.martor-preview h2{font-size:24px !important;color:rgb(0, 0, 0) !important} */
 /* styles.css */
 /* Thiết lập phông chữ và bố cục chung */
-body {
+/* body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     color: #000000;
-    background-color: #ffffff !important;
+    background-color:  #ffffff !important;
     margin: 0;
     height: full-screen;
-  }
+  } */
   
   .main-content {
+   padding: 0px !important;
     margin: 0 auto;
     background-color: #fff;
-    padding: 20px;
+    /* padding: 20px; */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
