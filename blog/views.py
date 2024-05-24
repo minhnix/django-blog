@@ -130,11 +130,13 @@ def post_detail(request, post_id):
     new_comment = None
 
     if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        print(request.POST)
+        print(request.user)
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
             new_comment.post = post
+            if request.user.is_authenticated:
+                new_comment.created_by = request.user
             parent_id = comment_form.cleaned_data.get('parent_id')
             if parent_id:
                 new_comment.parent = Comment.objects.get(id=parent_id)
@@ -145,6 +147,7 @@ def post_detail(request, post_id):
                 'content': new_comment.content,
                 'created_on': new_comment.created_on.strftime('%Y-%m-%d %H:%M:%S'),
                 'parent_id': new_comment.parent.id if new_comment.parent else None,
+                'created_by': new_comment.created_by.username if new_comment.created_by else 'Anonymous User',
                 'post_id': new_comment.post.id,
             })
 
