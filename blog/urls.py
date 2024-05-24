@@ -7,6 +7,7 @@ urlpatterns = [
     path('logout/', views.logout_f, name='logout'),
     path('tags/', views.tag_index, name='tag_index'),
     path('posts/', views.post_index, name='posts'),
+    path('search_posts/', views.posts_search, name='posts_search'),
     path('tags/<str:tag_name>/', views.tag_detail, name='tag_detail'),
     path('dashboard/', admin_views.index, name='dashboard'),
     path('dashboard/posts/', admin_views.post_index, name='admin_post'),

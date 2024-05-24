@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import logout, login, authenticate
 from django.http import JsonResponse
+from django.db.models import Q
 
 def index(request):
     return redirect('posts')
@@ -68,19 +69,49 @@ def post_index(request):
     data = []
 
     for post in posts:
-        tags = post.tags.all()  # Lấy tất cả các tags liên quan đến bài viết
-        tag_names = [tag.name for tag in tags]  # Tạo danh sách tên các tag (use tag.name instead of tag)
+        tags = post.tags.all()  
+        tag_names = [tag.name for tag in tags]  
 
         post_info = {
             'id': post.id,
             'title': post.title,
             'created_on': post.created_on,
             'author': post.author.username,
-            'tags': tag_names,  # Sử dụng danh sách tên các tag
+            'tags': tag_names,  
             'thumbnail': post.thumbnail.url if post.thumbnail else '',
         }
         
-        print(post_info['tags'])  # Access the tags using the dictionary key
+        print(post_info['tags'])  
+        data.append(post_info)
+
+    context = {
+        'posts': data,
+    }
+
+    return render(request, 'bootstrap/post_index.html', {'data': context})
+
+def posts_search(request):
+    
+    keyword = request.GET.get('keyword')
+    posts = Post.objects.filter(Q(title__icontains=keyword) | Q(tags__name__icontains=keyword))
+    
+    posts = posts.filter(published=True).select_related('author').prefetch_related('tags').order_by('-created_on').distinct()
+    
+    data = []
+
+    for post in posts:
+        tags = post.tags.all()
+        tag_names = [tag.name for tag in tags]
+
+        post_info = {
+            'id': post.id,
+            'title': post.title,
+            'created_on': post.created_on,
+            'author': post.author.username,
+            'tags': tag_names,
+            'thumbnail': post.thumbnail.url if post.thumbnail else '',
+        }
+
         data.append(post_info)
 
     context = {
@@ -94,7 +125,7 @@ def post_detail(request, post_id):
     posts_query = Post.objects.filter(published=True).order_by('-created_on').select_related('author').prefetch_related('tags')
     post = get_object_or_404(posts_query, id=post_id)
 
-    # print(post.tags)
+
     comments = post.comments.filter(parent__isnull=True)
     new_comment = None
 
@@ -127,7 +158,6 @@ def post_detail(request, post_id):
                 'comments': comments,
     }
     
-    # print(context.post.tags)
     
     theme = getattr(settings, "MARTOR_THEME", "bootstrap")
     return render(request, "%s/post_detail.html" % theme, context)
