@@ -99,7 +99,7 @@
               <p class="inline-flex mb-0 items-center mr-3 text-sm text-gray-900 font-semibold"><img
                       class="mr-2 w-8 h-8 rounded-full"
                       src="{% static 'images/profile-circle.svg' %}"
-                      alt="Anonymous user">Anonymous user</p>
+                      alt="Anonymous user">${comment.created_by}</p>
               <p class="mb-0 text-sm text-gray-600"><time pubdate datetime="${comment.created_on}"
                       title="${comment.created_on}">${comment.created_on}</time></p>
           </div>
@@ -116,6 +116,26 @@
   </article>
   `;
   };
+  function deleteComment(commentId) {
+    // Xác nhận trước khi xóa comment (có thể thay đổi hoặc loại bỏ nếu không cần)
+    if (confirm('Bạn có chắc muốn xóa comment này không?')) {
+        // Gửi yêu cầu xóa comment qua Ajax
+        $.ajax({
+            type: 'GET', // Hoặc 'POST' tùy thuộc vào cách bạn cấu hình máy chủ của mình
+            url: '/comments/' + commentId + '/delete',
+            success: function(response) {
+                // Xóa comment khỏi DOM khi xóa thành công
+                $('#comment-' + commentId).remove();
+                // Hoặc có thể cập nhật nội dung của comment nếu cần
+                // $('#comment-' + commentId).html(response);
+            },
+            error: function(xhr, status, error) {
+                // Xử lý lỗi nếu có
+                console.error(xhr.responseText);
+            }
+        });
+    }
+}
   $(document).ready(function() {
       $('.ajax-comment-form').on('submit', function(event) {
           event.preventDefault();
