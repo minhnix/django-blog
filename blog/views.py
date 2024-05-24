@@ -130,7 +130,6 @@ def post_detail(request, post_id):
     new_comment = None
 
     if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        print(request.user)
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
@@ -164,6 +163,13 @@ def post_detail(request, post_id):
     
     theme = getattr(settings, "MARTOR_THEME", "bootstrap")
     return render(request, "%s/post_detail.html" % theme, context)
+
+def delete_comment(request, comment_id):
+    if (request.user.is_authenticated == False):
+        return JsonResponse({'message': 'You need to login to delete comment.'}, status=401)    
+    comment = Comment.objects.get(id=comment_id)
+    comment.delete()
+    return JsonResponse({'message': 'Comment deleted successfully.'})
 
 def create_post(request):
 	return render(request, '../templates/boostrap/form.html')
